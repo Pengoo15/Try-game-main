@@ -16,7 +16,10 @@ import com.hotaruinori.Plays.CharacterMovement;
 import com.hotaruinori.Plays.ExpBall;
 import com.hotaruinori.Plays.Projectiles;
 import com.hotaruinori.main.other.*;
+import com.hotaruinori.monstars.BABY.BabyB;
 import com.hotaruinori.monstars.BOSS.BossA;
+import com.hotaruinori.monstars.BABY.BabyA;
+import com.hotaruinori.monstars.BABY.BabyC;
 
 public class Main implements ApplicationListener {
     // 遊戲資源
@@ -34,6 +37,9 @@ public class Main implements ApplicationListener {
     private Rectangle characterRectangle;
     private Projectiles rainDrops;
     private BossA boss1;
+    private BabyA baby1;
+    private BabyB baby2;
+    private BabyC baby3;
     //5/31飛彈
     private MissileManager missileManager;
 
@@ -73,6 +79,17 @@ public class Main implements ApplicationListener {
         //初始化怪物
         boss1 = new BossA();
         boss1.setPlayer(character);  //初始化追蹤位置並將"玩家的位置"傳給怪物的class
+        boss1.setMissileManager(missileManager);
+
+        baby1 = new BabyA();
+        baby1.setPlayer(character); // 將玩家實例傳給 Boss
+
+        baby2 = new BabyB();
+        baby2.setPlayer(character); // 將玩家實例傳給 Boss
+
+        baby3 = new BabyC();
+        baby3.setPlayer(character); // 將玩家實例傳給 Boss
+
 
         // 其他物件
         touchPos = new Vector2();
@@ -81,7 +98,7 @@ public class Main implements ApplicationListener {
         // 5/31新增飛彈系列  讓 BossA 知道 MissileManager
         missileManager = new MissileManager(); // <--- 初始化 MissileManager
         missileManager.setPlayerCharacter(character); // <--- 將玩家角色傳給 MissileManager
-        boss1.setMissileManager(missileManager);
+
         // ✅ 初始化怪物生成器（每 5 秒生成一次怪物）
         monsterGenerator = new Monster_Generator(character, viewport.getCamera(), 5.0f, missileManager);
 
@@ -156,6 +173,16 @@ public class Main implements ApplicationListener {
         if (boss1.isAlive()) { // <--- 新增判斷
             boss1.getMonsterAI().update(deltaTime); // 更新怪物 AI
         }
+
+        if (baby1.isAlive()) { // <--- 新增判斷
+            baby1.update(deltaTime); // 更新怪物 AI
+        }
+        if (baby2.isAlive()) { // <--- 新增判斷
+            baby2.update(deltaTime); // 更新怪物 AI
+        }
+        if (baby3.isAlive()) { // <--- 新增判斷
+            baby3.update(deltaTime); // 更新怪物 AI
+        }
         //飛彈
         missileManager.update(deltaTime); // <--- 由 MissileManager 更新所有飛彈
         // ✅ 更新怪物生成器
@@ -183,6 +210,10 @@ public class Main implements ApplicationListener {
         infiniteBackground.render(spriteBatch, character.getCenterPosition(), worldWidth, worldHeight);
         // 更新怪物、角色與子彈
         boss1.render(spriteBatch); // 將 batch 傳遞給 BossA 的 render 方法
+        baby1.render(spriteBatch);
+        baby2.render(spriteBatch);
+        baby3.render(spriteBatch);
+
         character.render(spriteBatch);
         //更新角色座標與地圖物件碰撞判定
         infiniteBackground.generateChunksAround(character.getCenterPosition(), 1); //
@@ -198,6 +229,16 @@ public class Main implements ApplicationListener {
 //            System.out.println("遊戲勝利！");
         }
 
+        if (baby1.isAlive()) { // <--- 新增判斷
+            baby1.render(spriteBatch); // 繪製 baby
+        }
+
+        if (baby2.isAlive()) { // <--- 新增判斷
+            baby2.render(spriteBatch); // 繪製 baby
+        }
+        if (baby3.isAlive()) { // <--- 新增判斷
+            baby3.render(spriteBatch); // 繪製 baby
+        }
         //飛彈
         missileManager.render(spriteBatch);    // <--- 由 MissileManager 渲染所有飛彈
         monsterGenerator.render(spriteBatch);
@@ -225,6 +266,9 @@ public class Main implements ApplicationListener {
         character.dispose();
         rainDrops.dispose();
         boss1.dispose();
+        baby1.dispose();
+        baby2.dispose();
+        baby3.dispose();
         pauseMenu.dispose();
         //5/31飛彈
         missileManager.dispose(); // <--- 釋放 MissileManager 的資源

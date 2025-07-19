@@ -102,7 +102,7 @@ public class BossA {
 
         // <--- 載入雷射攻擊圖片
         try {
-            laserAttackTexture = new Texture(Gdx.files.internal("monsters/mo1.png"));
+            laserAttackTexture = new Texture(Gdx.files.internal("monsters/LL.png"));
             laserAttackRegion = new TextureRegion(laserAttackTexture);
         } catch (Exception e) {
             Gdx.app.error("BossA", "無法載入 'monsters/bossLASERAttack.png' 圖片: " + e.getMessage());
@@ -337,7 +337,7 @@ public class BossA {
                 }
                 break;
 
-                //7/14
+            //7/14
             case LASER_ATTACK:
                 // 在雷射攻擊狀態下，可以繼續顯示雷射準備動畫，或者如果有專屬的雷射攻擊動畫，則使用它
                 if (monsterLaserPrepareAnimation != null) { // 這裡沿用準備動畫，您可以替換為專屬的雷射攻擊動畫

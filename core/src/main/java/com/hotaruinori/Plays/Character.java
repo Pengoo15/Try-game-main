@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Circle;
-import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Rectangle; // 確保有這個 import
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.graphics.Pixmap; // 繪製血條用
 
@@ -16,8 +16,8 @@ public class Character {
     float CURRENT_HEALTH = 100.0f;  //當前血量
     float AUTO_HEAL_POINT = 1.0f;     // 秒回
     float MOVE_SPEED = 4.0f;        //移動速度
-    float CHARACTER_HEIGHT = 0.5f;        //角色寬度
-    float CHARACTER_WIDTH = 0.5f;        //角色高度
+    float CHARACTER_HEIGHT = 0.5f;        //角色高度
+    float CHARACTER_WIDTH = 0.5f;        //角色寬度
     // 角色狀態枚舉
     public enum State {
         STANDING, WALKING
@@ -249,6 +249,19 @@ public class Character {
     public float getHeight() {
         return sprite.getHeight();
     }
+
+    /**
+     * 回傳代表玩家碰撞邊界的矩形
+     * 這個方法用於其他物件 (例如 Boss) 檢查是否與玩家發生碰撞。
+     * @return 玩家的碰撞矩形
+     */
+    public Rectangle getCharacterRectangle() {
+        // 直接使用 sprite 的 getBoundingRectangle() 方法可以更精確，
+        // 因為它包含了 sprite 的當前位置和大小
+        return sprite.getBoundingRectangle();
+    }
+
+
     //圓形碰撞區域，目前是給經驗值球用
     public Circle getBounds() {
         return new Circle(getX(), getY(), 1f); // 根據需要調整
@@ -364,6 +377,11 @@ public class Character {
         disposeAnimation(walkDownAnimation);
         disposeAnimation(walkLeftAnimation);
         disposeAnimation(walkRightAnimation);
+        // 釋放靜態的 whiteTexture
+        if (whiteTexture != null) {
+            whiteTexture.dispose();
+            whiteTexture = null; // 避免重複釋放
+        }
     }
 
     private void disposeAnimation(Animation<TextureRegion> animation) {
